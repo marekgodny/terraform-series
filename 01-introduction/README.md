@@ -1,0 +1,1 @@
+Please refer to: https://godny.substack.com/p/terraform-fundamentals-series-2
