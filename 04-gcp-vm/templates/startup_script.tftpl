@@ -1,0 +1,48 @@
+#!/bin/bash
+
+INSTALL_PACKAGES="${install_packages}"
+INSTALL_DOCKER=${install_docker}
+GITHUB_REPOSITORY_URL=${github_repository_url}
+GITHUB_SSH_KEY="${github_ssh_key}"
+
+if [ -n "$INSTALL_PACKAGES" ]; then
+  echo "Installing packages: $INSTALL_PACKAGES"
+  apt-get update && apt-get install -y $${INSTALL_PACKAGES}
+fi
+
+if [ -n "$INSTALL_DOCKER" ] && [ "$INSTALL_DOCKER" == "true" ]; then
+  # Install Docker
+  echo "Uninstalling previous version..."
+  sudo apt-get remove docker docker-engine docker.io containerd runc
+
+  echo "Setting up the repository"
+  sudo apt-get update
+  sudo apt-get install -y \
+      gnupg \
+      lsb-release
+
+  echo "Add Docker’s official GPG key"
+  sudo mkdir -p /etc/apt/keyrings
+  curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+  echo "Setting up stable docker repository"
+  echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
+    $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+  echo "Installing docker engine"
+  sudo apt-get update
+  sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+fi
+
+if [ -n "$GITHUB_REPOSITORY_URL" ]; then
+  echo "Cloning repository: $GITHUB_REPOSITORY_URL"
+  # download github repository
+  mkdir -p ~/.ssh
+  touch ~/.ssh/known_hosts
+  git config --global pull.rebase false
+  ssh-keygen -F github.com || ssh-keyscan github.com >> ~/.ssh/known_hosts
+  eval $(ssh-agent -s)
+  ssh-add - <<< $${GITHUB_SSH_KEY}
+  git clone $${GITHUB_REPOSITORY_URL}
+fi

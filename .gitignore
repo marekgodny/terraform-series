@@ -1,3 +1,9 @@
+# Ignore files without extensions, like private keys
+*
+!*/
+!*.*
+
+# Project
 .idea/
 
 ### Terraform
@@ -39,3 +45,4 @@ terraform.rc
 
 # Other
 .terraform*
+*.pem
