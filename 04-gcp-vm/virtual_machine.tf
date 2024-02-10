@@ -46,8 +46,8 @@ resource "google_compute_instance" "this" {
   metadata_startup_script = templatefile(
     "${path.module}/templates/startup_script.tftpl",
     {
-      install_packages = "vim curl wget git tmux nginx"
-      install_docker = "false"  # anything other than "true" will be considered as "false"
+      install_packages      = "vim curl wget git tmux nginx"
+      install_docker        = "false" # anything other than "true" will be considered as "false"
       github_repository_url = var.github_repository_url
       github_ssh_key        = var.github_access_key_path != "" ? data.local_sensitive_file.this[0].content : ""
     }
@@ -61,7 +61,7 @@ resource "google_compute_firewall" "this" {
   network = "default"
   allow {
     protocol = "tcp"
-    ports    = ["22", "80"]  # SSH & HTTP
+    ports    = ["22", "80"] # SSH & HTTP
   }
   target_tags   = [local.project_name]
   source_ranges = ["0.0.0.0/0"]
