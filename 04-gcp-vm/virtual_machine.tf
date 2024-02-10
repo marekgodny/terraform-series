@@ -27,7 +27,7 @@ resource "google_compute_instance" "this" {
 
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-10"
+      image = "debian-12-bookworm-v20240110"
     }
   }
 
@@ -41,12 +41,6 @@ resource "google_compute_instance" "this" {
 
   metadata = {
     ssh-keys = "${local.project_name}:${tls_private_key.this.public_key_openssh}"
-  }
-
-  service_account {
-    scopes = [
-      "https://www.googleapis.com/auth/cloud-platform",
-    ]
   }
 
   metadata_startup_script = templatefile(
