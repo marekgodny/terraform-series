@@ -4,7 +4,8 @@ locals {
     "compute.googleapis.com", # to create Virtual Machines
     "storage.googleapis.com",  # to store files, including Terraform state files
     "cloudbilling.googleapis.com",  # to manage billing accounts
-    "billingbudgets.googleapis.com"  # to manage billing budgets
+    "billingbudgets.googleapis.com",  # to manage billing budgets
+    "container.googleapis.com",  # to create Kubernetes clusters
   ]
 }
 
