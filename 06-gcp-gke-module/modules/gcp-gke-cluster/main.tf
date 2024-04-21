@@ -62,6 +62,5 @@ resource "google_compute_firewall" "this" {
   }
 
   source_ranges = ["0.0.0.0/0"]
-
-  source_service_accounts = [google_service_account.this.email]
+  target_tags   = ["${var.project_id}-gke"]
 }
